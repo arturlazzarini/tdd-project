@@ -1,0 +1,9 @@
+Primeiramente escreve um teste funcional.
+Se o teste não passa, deveremos escrever um código minimo.
+Esse cógido minimo, deve ser feito escrevendo um teste de unidade. 
+Se o teste de unidade não passa, devemos escrever outro código minimo.
+Se o teste de unidade passa, devemos compreender se precisa de refatoração.
+Se precisar, escrevemos outro código minimo.
+Se o teste funcional passa, precisamos saber se a aplicação precisa ou não de refatoração.
+Se não precisar, escrevemos outro teste funcional. 
+Se precisar, fazemos o processo do código minimo.
