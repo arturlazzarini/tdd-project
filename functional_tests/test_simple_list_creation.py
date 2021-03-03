@@ -6,29 +6,9 @@ from selenium.common.exceptions import WebDriverException
 MAX_WAIT = 5
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 
-class NewVisitorTest(StaticLiveServerTestCase):
+class NewVisitorTest(FunctionalTest):
 
-    def setUp(self):
-        self.browser = webdriver.Firefox()
-
-    def tearDown(self):
-        self.browser.quit()
-
-    def wait_for_row_in_list_table(self, row_text):
-        start_time = time.time()
-        while True:  
-            try:
-                table = self.browser.find_element_by_id('id_list_table')  
-                rows = table.find_elements_by_tag_name('tr')
-                self.assertIn(row_text, [row.text for row in rows])
-                return  
-            except (AssertionError, WebDriverException) as e:  
-                if time.time() - start_time > MAX_WAIT:  
-                    raise e  
-                time.sleep(0.5)
-
-    def test_can_start_a_list_for_one_user(self): 
-    
+    def test_can_start_a_list_for_one_user(self):
         # Maria decidiu utilizar o novo app TODO. Ela entra em sua página principal:
         self.browser.get(self.live_server_url)
 
@@ -65,9 +45,8 @@ class NewVisitorTest(StaticLiveServerTestCase):
         # Ela visita a URL: a sua lista TODO ainda está armazenada
 
         # Satisfeita, ela vai dormir
-
     def test_multiple_users_can_start_lists_at_different_urls(self):
-        # Maria começa uma nova lista
+         # Maria começa uma nova lista
         self.browser.get(self.live_server_url)
         inputbox = self.browser.find_element_by_id('id_new_item')
         inputbox.send_keys('Estudar testes funcionais')
@@ -106,27 +85,3 @@ class NewVisitorTest(StaticLiveServerTestCase):
 
         # Satisfeitos, ambos vão dormir
 
-    def test_layout_and_styling(self):
-        # Edith entra na home page
-        self.browser.get(self.live_server_url)
-        self.browser.set_window_size(1024, 768)
-
-        # Ela nota que o input box está centralizado
-        inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual(
-            inputbox.location['x'] + inputbox.size['width'] / 2,
-            512,
-            delta=10
-        )
-
-        # Ela inicia uma nova lista e nota que o input
-        # também está centralizado
-        inputbox.send_keys('testing')
-        inputbox.send_keys(Keys.ENTER)
-        self.wait_for_row_in_list_table('1: testing')
-        inputbox = self.browser.find_element_by_id('id_new_item')
-        self.assertAlmostEqual(
-            inputbox.location['x'] + inputbox.size['width'] / 2,
-            512,
-            delta=10
-        )
